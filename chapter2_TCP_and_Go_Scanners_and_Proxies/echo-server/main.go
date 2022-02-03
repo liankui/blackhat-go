@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"io"
 	"log"
 	"net"
@@ -33,6 +34,31 @@ func echo(conn net.Conn) {
 	}
 }
 
+func echo2(conn net.Conn) {
+	defer conn.Close()
+
+	reader := bufio.NewReader(conn)
+	s, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalln("Unable to read data")
+	}
+	log.Printf("read %d bytes: %s", len(s), s)
+
+	log.Println("writing data")
+	writer := bufio.NewWriter(conn)
+	if _, err = writer.WriteString(s); err != nil {
+		log.Fatalln("Unable to write data")
+	}
+	writer.Flush() // 将所有数据写入底层writer
+}
+
+func echo3(conn net.Conn) {
+	defer conn.Close()
+	if _, err := io.Copy(conn, conn); err != nil {
+		log.Fatalln("Unable to read/write data")
+	}
+}
+
 func main() {
 	// Bind to TCP port 20080 on all interfaces.
 	listener, err := net.Listen("tcp", ":20080")
@@ -48,6 +74,6 @@ func main() {
 			log.Fatalln("Unable to accept connection")
 		}
 		// Handle the connection. Using goroutine for concurrency.
-		go echo(conn)
+		go echo3(conn)
 	}
 }
