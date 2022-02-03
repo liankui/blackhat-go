@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	resp, err := http.Get("https://www.google.com/robots.txt")
+	resp, err := http.Get("https://www.baidu.com/robots.txt")
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -19,14 +19,14 @@ func main() {
 	fmt.Println(resp.Status)
 
 	// Read and display response body
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Panicln(err)
 	}
-	fmt.Println(string(body))
+	//fmt.Println(string(body))
 	resp.Body.Close()
 
-	resp, err = http.Head("https://www.google.com/robots.txt")
+	resp, err = http.Head("https://www.baidu.com/robots.txt")
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -36,7 +36,7 @@ func main() {
 	form := url.Values{}
 	form.Add("foo", "bar")
 	resp, err = http.Post(
-		"https://www.google.com/robots.txt",
+		"https://www.baidu.com/robots.txt",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(form.Encode()),
 	)
@@ -46,7 +46,7 @@ func main() {
 	resp.Body.Close()
 	fmt.Println(resp.Status)
 
-	req, err := http.NewRequest("DELETE", "https://www.google.com/robots.txt", nil)
+	req, err := http.NewRequest("DELETE", "https://www.baidu.com/robots.txt", nil)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -55,7 +55,7 @@ func main() {
 	resp.Body.Close()
 	fmt.Println(resp.Status)
 
-	req, err = http.NewRequest("PUT", "https://www.google.com/robots.txt", strings.NewReader(form.Encode()))
+	req, err = http.NewRequest("PUT", "https://www.baidu.com/robots.txt", strings.NewReader(form.Encode()))
 	resp, err = client.Do(req)
 	if err != nil {
 		log.Panicln(err)
